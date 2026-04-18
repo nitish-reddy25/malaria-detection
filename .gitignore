@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
+# Dataset — do NOT commit raw data (too large; download from Kaggle)
+data/Parasitized/
+data/Uninfected/
+data/*.npy
+
+# Saved model weights (too large for GitHub)
+results/saved_models/*.h5
+results/saved_models/*.keras
+
+# Flask uploads — do not commit user-uploaded files
+app/static/uploads/
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Logs
+*.log
+*.csv.bak

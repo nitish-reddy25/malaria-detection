@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Result — Malaria Cell Detector</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-icon">🧬</div>
+      <h1>Detection Result</h1>
+    </header>
+
+    <div class="result-card {% if prediction == 'Parasitized' %}result-infected{% else %}result-normal{% endif %}">
+
+      <div class="result-image">
+        <img src="{{ image_url }}" alt="Uploaded blood smear" />
+      </div>
+
+      <div class="result-details">
+        <div class="result-badge {% if prediction == 'Parasitized' %}badge-infected{% else %}badge-normal{% endif %}">
+          {% if prediction == 'Parasitized' %}🔴{% else %}🟢{% endif %}
+          {{ prediction }}
+        </div>
+
+        <div class="result-row">
+          <span class="label">Confidence</span>
+          <span class="value">{{ confidence }}%</span>
+        </div>
+
+        <div class="progress-bar-wrap">
+          <div class="progress-bar {% if prediction == 'Parasitized' %}bar-infected{% else %}bar-normal{% endif %}"
+               style="width: {{ confidence }}%"></div>
+        </div>
+
+        <div class="result-row">
+          <span class="label">Model Used</span>
+          <span class="value">{{ model_used }}</span>
+        </div>
+
+        <div class="result-row">
+          <span class="label">Processing Time</span>
+          <span class="value">{{ time_taken }}s</span>
+        </div>
+
+        {% if needs_review %}
+        <div class="alert alert-warning">
+          ⚠️ Low confidence detected. Manual review by a trained microscopist is recommended.
+        </div>
+        {% endif %}
+
+        <div class="disclaimer">
+          <strong>⚕️ Medical Disclaimer:</strong> This tool is a research prototype intended to assist — not replace — clinical diagnosis. All results should be reviewed by a qualified healthcare professional.
+        </div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <a href="/" class="btn-secondary">← Upload Another Image</a>
+    </div>
+  </div>
+</body>
+</html>

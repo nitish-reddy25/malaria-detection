@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malaria Cell Detector</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-icon">🧬</div>
+      <h1>Malaria Cell Detector</h1>
+      <p class="subtitle">Upload a blood smear image to detect malaria-infected cells using deep learning.</p>
+    </header>
+
+    {% if error %}
+    <div class="alert alert-error">⚠️ {{ error }}</div>
+    {% endif %}
+
+    <form action="/predict" method="POST" enctype="multipart/form-data" id="upload-form">
+
+      <!-- Drop zone -->
+      <div class="dropzone" id="dropzone">
+        <div class="drop-icon">📁</div>
+        <p class="drop-text">Drag & drop your image here</p>
+        <p class="drop-sub">or click to browse</p>
+        <input type="file" name="file" id="file-input" accept="image/*" required hidden />
+        <div id="file-preview" class="file-preview hidden"></div>
+      </div>
+
+      <!-- Model selector -->
+      <div class="form-group">
+        <label for="model">Select Model</label>
+        <select name="model" id="model">
+          <option value="hybrid" selected>Hybrid CNN-BiLSTM (Best Accuracy — 96.20%)</option>
+          <option value="cnn">Custom CNN (97.40%)</option>
+          <option value="vgg19">VGG19 Transfer Learning (95.56%)</option>
+          <option value="resnet50">ResNet50 Transfer Learning (96.00%)</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn-predict" id="submit-btn">
+        <span id="btn-text">🔬 Analyse Image</span>
+        <span id="btn-loading" class="hidden">⏳ Analysing...</span>
+      </button>
+    </form>
+
+    <div class="info-cards">
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <div class="card-title">27,558 Images</div>
+        <div class="card-sub">NIH training dataset</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">🎯</div>
+        <div class="card-title">96.20% Accuracy</div>
+        <div class="card-sub">Hybrid CNN-BiLSTM model</div>
+      </div>
+      <div class="card">
+        <div class="card-icon">⚡</div>
+        <div class="card-title">&lt; 2 Seconds</div>
+        <div class="card-sub">Per image inference</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const dropzone  = document.getElementById('dropzone');
+    const fileInput = document.getElementById('file-input');
+    const preview   = document.getElementById('file-preview');
+    const form      = document.getElementById('upload-form');
+    const btnText   = document.getElementById('btn-text');
+    const btnLoad   = document.getElementById('btn-loading');
+
+    dropzone.addEventListener('click', () => fileInput.click());
+
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('drag-over');
+    });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('drag-over');
+      fileInput.files = e.dataTransfer.files;
+      showPreview(e.dataTransfer.files[0]);
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files[0]) showPreview(fileInput.files[0]);
+    });
+
+    function showPreview(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        preview.innerHTML = `<img src="${e.target.result}" alt="Preview" /><p>${file.name}</p>`;
+        preview.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    form.addEventListener('submit', () => {
+      btnText.classList.add('hidden');
+      btnLoad.classList.remove('hidden');
+    });
+  </script>
+</body>
+</html>
