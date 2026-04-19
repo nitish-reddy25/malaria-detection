@@ -1,4 +1,4 @@
-name: CI — Lint & Unit Tests
+name: CI
 
 on:
   push:
@@ -11,16 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - name: Set up Python 3.10
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
-
       - name: Install dependencies
+        run: pip install numpy opencv-python-headless scikit-learn pytest
+      - name: Syntax check
         run: |
-          pip install --upgrade pip
-          pip install numpy opencv-python-headless scikit-learn pytest
-
-      - name: Run unit tests
-        run: pytest tests/ -v
+          python -m py_compile src/preprocessing.py && echo "preprocessing OK"
+          python -m py_compile src/models.py && echo "models OK"
+          python -m py_compile src/train.py && echo "train OK"
+          python -m py_compile src/evaluate.py && echo "evaluate OK"
+          python -m py_compile src/predict.py && echo "predict OK"
+          python -m py_compile app/app.py && echo "app OK"
+      - name: Run tests
+        run: pytest tests/ -v --tb=short
