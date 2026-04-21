@@ -7,7 +7,7 @@
 [![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-FF6F00?style=flat-square&logo=tensorflow&logoColor=white)](https://tensorflow.org)
 [![Flask](https://img.shields.io/badge/Flask-2.x-000000?style=flat-square&logo=flask&logoColor=white)](https://flask.palletsprojects.com)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
-[![Accuracy](https://img.shields.io/badge/Best%20Accuracy-96.20%25-brightgreen?style=flat-square)]()
+[![Accuracy](https://img.shields.io/badge/Best%20Accuracy-96.84%25-brightgreen?style=flat-square)]()
 
 ---
 
@@ -15,7 +15,7 @@
 
 This project develops an automated malaria detection system using deep learning models trained on microscopic blood smear images. The system classifies red blood cell images as either **Parasitized** (malaria-infected) or **Uninfected** with high accuracy, supporting faster and more reliable diagnosis — especially in resource-constrained healthcare settings.
 
-The core architecture benchmarks three models:
+The core architecture benchmarks four architectures:
 - A **custom CNN** optimized for this task
 - **VGG19** with transfer learning
 - **ResNet50** with transfer learning
