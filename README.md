@@ -15,11 +15,11 @@
 
 This project develops an automated malaria detection system using deep learning models trained on microscopic blood smear images. The system classifies red blood cell images as either **Parasitized** (malaria-infected) or **Uninfected** with high accuracy, supporting faster and more reliable diagnosis — especially in resource-constrained healthcare settings.
 
-The core architecture benchmarks four architectures:
-- A **custom CNN** optimized for this task
-- **VGG19** with transfer learning
-- **ResNet50** with transfer learning
-- A **hybrid CNN-LSTM-BiLSTM** model combining spatial and sequential feature analysis
+Four architectures are benchmarked:
+- A **custom CNN** optimized for this specific task
+- **VGG19** with ImageNet transfer learning
+- **ResNet50** with ImageNet transfer learning
+- A **hybrid CNN-BiLSTM** combining spatial feature extraction with sequential modelling
 
 ---
 
@@ -28,13 +28,14 @@ The core architecture benchmarks four architectures:
 | Model | Accuracy | Precision | Recall | F1-Score | AUC-ROC |
 |---|---|---|---|---|---|
 | **Custom CNN** | **96.84%** | 0.9785 | 0.9579 | 0.9681 | 0.9923 |
+| Hybrid CNN-BiLSTM | 96.41% | 0.9720 | 0.9557 | 0.9638 | 0.9916 |
 | VGG19 (Transfer Learning) | 92.71% | 0.9435 | 0.9086 | 0.9257 | 0.9782 |
 | ResNet50 (Transfer Learning) | 69.34% | 0.6754 | 0.7446 | 0.7083 | 0.7610 |
-| Hybrid CNN-BiLSTM | 96.41% | 0.9720 | 0.9557 | 0.9638 | 0.9916 |
 
-> Dataset: NIH Malaria Cell Images Dataset — 27,558 images (Parasitized: 13,779 / Uninfected: 13,779)  
-> Best model: **Custom CNN** at 96.84% test accuracy  
-> Results generated on: NVIDIA T4 GPU (Google Colab)
+> **Dataset:** NIH Malaria Cell Images Dataset — 27,558 images (Parasitized: 13,779 / Uninfected: 13,779)  
+> **Best model:** Custom CNN at 96.84% test accuracy  
+> **Hardware:** NVIDIA T4 GPU (Google Colab)  
+> **Note:** ResNet50's lower score reflects frozen-backbone limitations at 128×128 input resolution. Fine-tuning deeper layers or increasing input size to 224×224 is expected to significantly improve performance.
 
 ---
 
@@ -44,14 +45,11 @@ The core architecture benchmarks four architectures:
 malaria-detection/
 ├── notebooks/
 │   ├── 01_data_exploration.ipynb       # EDA, class distribution, sample visualization
-│   ├── 02_preprocessing.ipynb          # Preprocessing pipeline walkthrough
 │   ├── 03_model_cnn.ipynb              # Custom CNN training & evaluation
-│   ├── 04_model_vgg19.ipynb            # VGG19 transfer learning
-│   ├── 05_model_resnet50.ipynb         # ResNet50 transfer learning
-│   └── 06_model_hybrid.ipynb           # CNN-LSTM-BiLSTM hybrid model
+│   └── 06_model_hybrid.ipynb           # CNN-BiLSTM hybrid model
 ├── src/
 │   ├── preprocessing.py                # Image loading, augmentation, data splits
-│   ├── models.py                       # All model architectures
+│   ├── models.py                       # All four model architectures
 │   ├── train.py                        # Training pipeline with callbacks
 │   ├── evaluate.py                     # Metrics, confusion matrix, plots
 │   └── predict.py                      # Single-image inference utility
@@ -65,6 +63,7 @@ malaria-detection/
 ├── results/
 │   ├── training_curves/                # Loss & accuracy plots (PNG)
 │   ├── confusion_matrices/             # Per-model confusion matrices
+│   ├── training_logs/                  # Per-epoch CSV logs
 │   └── metrics_summary.csv            # All experiment results
 ├── tests/
 │   └── test_preprocessing.py          # Unit tests
@@ -104,7 +103,7 @@ python src/train.py --model cnn --epochs 50 --batch_size 32
 # Train VGG19 with transfer learning
 python src/train.py --model vgg19 --epochs 30 --batch_size 32
 
-# Train the hybrid model
+# Train the hybrid CNN-BiLSTM
 python src/train.py --model hybrid --epochs 50 --batch_size 32
 ```
 
@@ -121,24 +120,26 @@ python app.py
 ## 🧠 Model Architectures
 
 ### Custom CNN
-Six convolutional blocks with BatchNormalization and Dropout, designed from scratch for this binary classification task. Achieves high recall on parasitized cells with minimal compute.
+Six convolutional blocks with BatchNormalization and Dropout, designed from scratch for this binary classification task. Best-performing model at **96.84% accuracy**.
 
 ### Transfer Learning (VGG19 / ResNet50)
-ImageNet-pretrained backbones with frozen convolutional bases and custom classification heads (GlobalAveragePooling → Dense 256 → Dropout → Dense 1).
+ImageNet-pretrained backbones with frozen convolutional bases and custom classification heads (GlobalAveragePooling → Dense 256 → Dropout → Dense 1). VGG19 achieves 92.71%; ResNet50 underperforms at this input resolution with a frozen backbone.
 
-### Hybrid CNN-LSTM-BiLSTM
-Spatial feature maps from CNN layers are reshaped into sequences and passed through BiLSTM layers, allowing the model to capture both local texture patterns and spatial dependencies across cell regions.
+### Hybrid CNN-BiLSTM
+Spatial feature maps from CNN layers are reshaped into sequences and passed through Bidirectional LSTM layers, allowing the model to capture both local texture patterns and spatial dependencies across cell regions. Achieves **96.41% accuracy**.
 
 ---
 
-## 📊 Sample Results
+## 📊 Confusion Matrix — Best Model (Custom CNN)
 
-| Input | Prediction | Confidence |
-|---|---|---|
-| Parasitized cell image | 🔴 Parasitized | 99.8% |
-| Uninfected cell image | 🟢 Normal | 99.6% |
+```
+                Predicted
+                Uninfected   Parasitized
+True Uninfected    1340           38
+     Parasitized     61         1317
+```
 
-*(See `results/` folder for full confusion matrices and training curves)*
+False Negatives (61) — infected cells classified as healthy — are the critical error type in medical diagnosis. The model's high recall (95.79%) minimises this risk.
 
 ---
 
