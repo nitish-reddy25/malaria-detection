@@ -25,14 +25,16 @@ The core architecture benchmarks three models:
 
 ## 🏆 Results Summary
 
-| Model | Accuracy | Precision | Recall | F1-Score |
-|---|---|---|---|---|
-| Custom CNN | 97.40% | 0.974 | 0.974 | 0.974 |
-| VGG19 (Transfer Learning) | 95.56% | 0.956 | 0.955 | 0.955 |
-| ResNet50 (Transfer Learning) | 96.00% | 0.961 | 0.960 | 0.960 |
-| **CNN-LSTM-BiLSTM (Hybrid)** | **96.20%** | **0.963** | **0.962** | **0.962** |
+| Model | Accuracy | Precision | Recall | F1-Score | AUC-ROC |
+|---|---|---|---|---|---|
+| **Custom CNN** | **96.84%** | 0.9785 | 0.9579 | 0.9681 | 0.9923 |
+| VGG19 (Transfer Learning) | 92.71% | 0.9435 | 0.9086 | 0.9257 | 0.9782 |
+| ResNet50 (Transfer Learning) | 69.34% | 0.6754 | 0.7446 | 0.7083 | 0.7610 |
+| Hybrid CNN-BiLSTM | 96.41% | 0.9720 | 0.9557 | 0.9638 | 0.9916 |
 
-> Dataset: NIH Malaria Cell Images Dataset — 27,558 images (Parasitized: 13,779 / Uninfected: 13,779)
+> Dataset: NIH Malaria Cell Images Dataset — 27,558 images (Parasitized: 13,779 / Uninfected: 13,779)  
+> Best model: **Custom CNN** at 96.84% test accuracy  
+> Results generated on: NVIDIA T4 GPU (Google Colab)
 
 ---
 
