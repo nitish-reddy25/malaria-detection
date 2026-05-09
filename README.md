@@ -162,7 +162,7 @@ See `requirements.txt`. Key dependencies:
 | B. Mahendra | 21691A0598 |
 | M. Manjunath | 21691A05A5 |
 
-**Guide:** G. Vasundhra Devi, Assistant Professor, Dept. of CSE, MITS  
+**Guide:** G. Vasundhara Devi, Assistant Professor, Dept. of CSE, MITS  
 **Institution:** Madanapalle Institute of Technology & Science (MITS), Andhra Pradesh
 
 ---
