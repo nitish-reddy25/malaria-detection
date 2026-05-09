@@ -115,6 +115,8 @@ python app.py
 # Open http://localhost:5000
 ```
 
+The app uses a confidence threshold of 0.80. When the model is at least 80% confident in its prediction, it returns "Parasitized" or "Uninfected". When confidence falls below 80%, the result is flagged as "⚠️ Low confidence detected — Manual review recommended" rather than auto-classified — reflecting the cost asymmetry of missing a parasitized cell in a clinical screening context.
+
 ---
 
 ## 🧠 Model Architectures
