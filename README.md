@@ -45,8 +45,8 @@ Four architectures are benchmarked:
 malaria-detection/
 ├── notebooks/
 │   ├── 01_data_exploration.ipynb       # EDA, class distribution, sample visualization
-│   ├── 03_model_cnn.ipynb              # Custom CNN training & evaluation
-│   └── 06_model_hybrid.ipynb           # CNN-BiLSTM hybrid model
+│   ├── 02_model_cnn.ipynb              # Custom CNN training & evaluation
+│   └── 03_model_hybrid.ipynb           # CNN-BiLSTM hybrid model
 ├── src/
 │   ├── preprocessing.py                # Image loading, augmentation, data splits
 │   ├── models.py                       # All four model architectures
@@ -120,6 +120,9 @@ The app uses a confidence threshold of 0.80. When the model is at least 80% conf
 ---
 
 ## 🧠 Model Architectures
+
+> **Note on VGG19 and ResNet50.** The two transfer-learning baselines are implemented in `src/models.py` and trained from the command line via `python src/train.py --model vgg19` and `python src/train.py --model resnet50`. Their training logs, metrics, and confusion matrices are saved in `results/`. They don't have dedicated notebooks because all four models share the same training pipeline in `src/train.py`.
+>
 
 ### Custom CNN
 Six convolutional blocks with BatchNormalization and Dropout, designed from scratch for this binary classification task. Best-performing model at **96.84% accuracy**.
