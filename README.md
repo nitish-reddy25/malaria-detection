@@ -135,11 +135,11 @@ Spatial feature maps from CNN layers are reshaped into sequences and passed thro
 ```
                 Predicted
                 Uninfected   Parasitized
-True Uninfected    1340           38
-     Parasitized     61         1317
+True Uninfected    1349           29
+     Parasitized     58         1320
 ```
 
-False Negatives (61) — infected cells classified as healthy — are the critical error type in medical diagnosis. The model's high recall (95.79%) minimises this risk.
+False Negatives (58 out of 1,378 parasitized samples, a false-negative rate of 4.21%) are the critical error type in medical diagnosis. The model's high recall (95.79%) minimises this risk.
 
 ---
 
