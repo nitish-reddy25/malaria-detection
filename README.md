@@ -119,6 +119,42 @@ The app uses a confidence threshold of 0.80. When the model is at least 80% conf
 
 ---
 
+## 🖥️ Web App Preview
+
+The Flask app provides a browser-based interface for real-time inference using any of the four trained models. Below are screenshots from a working local deployment using the trained model checkpoints.
+
+### Upload Interface
+
+![Upload page](docs/screenshots/app_home_page.png)
+
+Users upload a blood smear image, select a model from the dropdown (Custom CNN is selected by default — the best-performing model at 96.84% accuracy), and click **Analyse Image**.
+
+### Multiple Models, Consistent Predictions
+
+The app supports inference across all four trained models. On a parasitized test image, both top-performing models agree:
+
+**Hybrid CNN-BiLSTM — 99.9% confidence:**
+
+![Parasitized cell, Hybrid model](docs/screenshots/app_parasitized_hybrid.png)
+
+**Custom CNN — 99.8% confidence:**
+
+![Parasitized cell, Custom CNN](docs/screenshots/app_parasitized_cnn.png)
+
+### Correctly Distinguishing the Negative Class
+
+![Uninfected cell, Hybrid model, 95.9% confidence](docs/screenshots/app_uninfected_hybrid.png)
+
+The Hybrid model correctly classifies an uninfected cell with 95.9% confidence. The visual treatment (green badge, green progress bar) makes the negative result immediately distinguishable from a parasitized one.
+
+### Manual Review Flag in Action
+
+![Low-confidence prediction with manual review warning](docs/screenshots/app_review_flag_resnet50.png)
+
+When the model's confidence falls below 0.80, the prediction is flagged for manual review rather than being reported as a confident diagnosis. In this example, the weaker ResNet50 baseline misclassifies an uninfected cell at only 67.4% confidence — well below the threshold — so the warning is displayed and a microscopist is recommended to review the result. This demonstrates the cost-asymmetry-aware safety mechanism that is central to the synopsis's clinical-screening framing.
+
+---
+
 ## 🧠 Model Architectures
 
 > **Note on VGG19 and ResNet50.** The two transfer-learning baselines are implemented in `src/models.py` and trained from the command line via `python src/train.py --model vgg19` and `python src/train.py --model resnet50`. Their training logs, metrics, and confusion matrices are saved in `results/`. They don't have dedicated notebooks because all four models share the same training pipeline in `src/train.py`.
