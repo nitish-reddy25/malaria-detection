@@ -119,6 +119,38 @@ The app uses a confidence threshold of 0.80. When the model is at least 80% conf
 
 ---
 
+## 📦 Model Checkpoints
+
+Trained model weights are not included in this repository because they total ~222 MB across the four models, which is larger than recommended for standard Git storage. They can be obtained two ways:
+
+### Option 1 — Download pre-trained checkpoints (recommended)
+
+The four trained `.h5` files are available on Google Drive:
+
+📥 **[Download all four model checkpoints](https://drive.google.com/drive/folders/1Smz6ramDiLmvD3XHwln1UFYFNLF7rsFV?usp=sharing)**
+
+| File | Size | Test Accuracy |
+|------|------|---------------|
+| `cnn_best.h5` | 15.1 MB | 96.84% |
+| `hybrid_best.h5` | 32.2 MB | 96.41% |
+| `vgg19_best.h5` | 78 MB | 92.71% |
+| `resnet50_best.h5` | 96.4 MB | 69.34% |
+
+After downloading, place all four files in `results/saved_models/` at the repository root. The Flask app (`app/app.py`) will load them from this location automatically.
+
+### Option 2 — Reproduce from scratch
+
+The Custom CNN and Hybrid CNN-BiLSTM models can be retrained from the included Colab notebooks (a free T4 GPU is sufficient for all four models):
+
+- `notebooks/02_model_cnn.ipynb` — Custom CNN
+- `notebooks/03_model_hybrid.ipynb` — Hybrid CNN-BiLSTM
+
+The VGG19 and ResNet50 transfer-learning baselines were trained using the procedures documented in the **Model Architectures** section below.
+
+Verified test-set metrics for all four models are committed in [`results/metrics_summary.csv`](results/metrics_summary.csv) and the confusion matrices are in [`results/confusion_matrices/`](results/confusion_matrices/), so the reported numbers can be checked without re-running training.
+
+---
+
 ## 🖥️ Web App Preview
 
 The Flask app provides a browser-based interface for real-time inference using any of the four trained models. Below are screenshots from a working local deployment using the trained model checkpoints.
